@@ -54,9 +54,9 @@ const activityData = [
 
 /* ─── Donut chart data ─── */
 const statusData = [
-  { name: 'Approved', value: 89, color: '#003594' },
-  { name: 'Pending', value: 24, color: '#FFD700' },
-  { name: 'Draft', value: 18, color: '#1E3A5F' },
+  { name: 'Approved', value: 89, color: '#FFFFFF' },
+  { name: 'Pending', value: 24, color: '#FFFFFF' },
+  { name: 'Draft', value: 18, color: '#333333' },
 ];
 
 /* ─── Activity feed data ─── */
@@ -73,14 +73,14 @@ const activityFeed = [
 
 /* ─── Phase gate data ─── */
 const phases = [
-  { name: 'Phase 0: Internal Sandbox', progress: 100, color: '#10B981' },
-  { name: 'Phase 1: Crypto Non-Custodial', progress: 85, color: '#003594' },
-  { name: 'Phase 2: Custodial Hybrid', progress: 60, color: '#003594' },
-  { name: 'Phase 3: US Approved State', progress: 30, color: '#FFD700' },
-  { name: 'Phase 4: National Rollout', progress: 0, color: '#1E3A5F' },
-  { name: 'Phase 5: Global Expansion', progress: 0, color: '#1E3A5F' },
-  { name: 'Phase 6: Full Autonomy', progress: 0, color: '#1E3A5F' },
-  { name: 'Phase 7: DAO Handover', progress: 0, color: '#1E3A5F' },
+  { name: 'Phase 0: Internal Sandbox', progress: 100, color: '#FFFFFF' },
+  { name: 'Phase 1: Crypto Non-Custodial', progress: 85, color: '#FFFFFF' },
+  { name: 'Phase 2: Custodial Hybrid', progress: 60, color: '#FFFFFF' },
+  { name: 'Phase 3: US Approved State', progress: 30, color: '#FFFFFF' },
+  { name: 'Phase 4: National Rollout', progress: 0, color: '#333333' },
+  { name: 'Phase 5: Global Expansion', progress: 0, color: '#333333' },
+  { name: 'Phase 6: Full Autonomy', progress: 0, color: '#333333' },
+  { name: 'Phase 7: DAO Handover', progress: 0, color: '#333333' },
 ];
 
 /* ─── Document table mock data ─── */
@@ -157,21 +157,21 @@ function ChartsSection() {
         <div className="mt-4" style={{ height: 200 }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={activityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1E3A5F" />
-              <XAxis dataKey="day" tick={{ fill: '#6B7280', fontSize: 10 }} stroke="#1E3A5F" interval={4} />
-              <YAxis tick={{ fill: '#6B7280', fontSize: 10 }} stroke="#1E3A5F" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#333333" />
+              <XAxis dataKey="day" tick={{ fill: '#888888', fontSize: 10 }} stroke="#333333" interval={4} />
+              <YAxis tick={{ fill: '#888888', fontSize: 10 }} stroke="#333333" />
               <Tooltip
-                contentStyle={{ backgroundColor: '#002244', border: '1px solid #1E3A5F', borderRadius: '6px', fontSize: '12px' }}
+                contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333333', borderRadius: '6px', fontSize: '12px' }}
                 itemStyle={{ color: '#FFFFFF' }}
                 labelStyle={{ color: '#B0B7BC' }}
               />
               <Line
                 type="monotone"
                 dataKey="docs"
-                stroke="#003594"
+                stroke="#FFFFFF"
                 strokeWidth={2}
-                dot={{ fill: '#003594', r: 3 }}
-                activeDot={{ r: 5, fill: '#003594' }}
+                dot={{ fill: '#FFFFFF', r: 3 }}
+                activeDot={{ r: 5, fill: '#FFFFFF' }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -204,7 +204,7 @@ function ChartsSection() {
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{ backgroundColor: '#002244', border: '1px solid #1E3A5F', borderRadius: '6px', fontSize: '12px' }}
+                contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333333', borderRadius: '6px', fontSize: '12px' }}
                 itemStyle={{ color: '#FFFFFF' }}
               />
             </PieChart>
@@ -227,18 +227,18 @@ function ChartsSection() {
 function RecentActivity() {
   const getIcon = (type: string) => {
     switch (type) {
-      case 'approved': return <CheckCircle size={16} className="text-[#10B981]" />;
-      case 'pending': return <AlertCircle size={16} className="text-[#F59E0B]" />;
+      case 'approved': return <CheckCircle size={16} className="text-[#FFFFFF]" />;
+      case 'pending': return <AlertCircle size={16} className="text-[#FFFFFF]" />;
       case 'upload': return <FileText size={16} className="text-usa-blue" />;
-      case 'complete': return <CheckCircle size={16} className="text-[#10B981]" />;
+      case 'complete': return <CheckCircle size={16} className="text-[#FFFFFF]" />;
       default: return <FileText size={16} className="text-usa-silver" />;
     }
   };
 
   const getDotColor = (type: string) => {
     switch (type) {
-      case 'approved': case 'complete': return 'bg-[#10B981]';
-      case 'pending': return 'bg-[#F59E0B]';
+      case 'approved': case 'complete': return 'bg-[#FFFFFF]';
+      case 'pending': return 'bg-[#FFFFFF]';
       case 'upload': return 'bg-usa-blue';
       default: return 'bg-usa-muted';
     }
@@ -331,9 +331,9 @@ function DocumentsView() {
   const statusBadge = (status: string) => {
     switch (status) {
       case 'Approved':
-        return 'bg-[rgba(16,185,129,0.15)] text-[#10B981]';
+        return 'bg-[rgba(16,185,129,0.15)] text-[#FFFFFF]';
       case 'Pending':
-        return 'bg-[rgba(245,158,11,0.15)] text-[#F59E0B]';
+        return 'bg-[rgba(245,158,11,0.15)] text-[#FFFFFF]';
       case 'Draft':
         return 'bg-[rgba(107,114,128,0.15)] text-usa-muted';
       default:
@@ -568,7 +568,7 @@ function PhaseGatesView() {
               className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded"
               style={{
                 backgroundColor: phase.progress === 100 ? 'rgba(16,185,129,0.15)' : phase.progress > 0 ? 'rgba(0,53,148,0.15)' : 'rgba(30,58,95,0.3)',
-                color: phase.progress === 100 ? '#10B981' : phase.progress > 0 ? '#B0B7BC' : '#6B7280',
+                color: phase.progress === 100 ? '#FFFFFF' : phase.progress > 0 ? '#B0B7BC' : '#888888',
               }}
             >
               {phase.progress === 100 ? 'Complete' : phase.progress > 0 ? 'In Progress' : 'Not Started'}

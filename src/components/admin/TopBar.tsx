@@ -32,7 +32,7 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
           aria-label="Notifications"
         >
           <Bell size={20} className="text-usa-silver" strokeWidth={1.5} />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-[#EF4444] rounded-full" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-[#FFFFFF] rounded-full" />
         </button>
         <div className="w-8 h-8 rounded-full bg-usa-border flex items-center justify-center ml-1">
           <span className="text-xs font-semibold text-white">A</span>
