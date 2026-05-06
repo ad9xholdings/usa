@@ -1,6 +1,7 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { ModalProvider } from './components/ModalContext';
 import Home from './pages/Home';
+import Admin from './pages/Admin';
 import Layout from './components/Layout';
 import MasterclassModal from './pages/MasterclassModal';
 import AudioModal from './pages/AudioModal';
@@ -24,13 +25,20 @@ export default function App() {
   return (
     <HashRouter>
       <ModalProvider>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<div className="p-8 text-white text-center">Admin Panel</div>} />
-            <Route path="/create" element={<div className="p-8 text-white text-center">Create Content</div>} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/*"
+            element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/create" element={<div className="p-8 text-white text-center">Create Content</div>} />
+                </Routes>
+              </Layout>
+            }
+          />
+        </Routes>
         <ModalContainer />
       </ModalProvider>
     </HashRouter>
