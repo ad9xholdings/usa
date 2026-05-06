@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Headphones, Play, Database, Layers, Grid3X3, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useModal } from '@/components/ModalContext';
 import LogoUSA from '@/components/icons/LogoUSA';
 import Ad9xBadge from '@/components/icons/Ad9xBadge';
 import IconMusic from '@/components/icons/IconMusic';
@@ -51,6 +52,7 @@ export default function Home() {
   const [activeEngine, setActiveEngine] = useState('AskLight');
   const [searchFocused, setSearchFocused] = useState(false);
   const navigate = useNavigate();
+  const { openModal } = useModal();
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4">
@@ -211,9 +213,9 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: 0.75 + i * 0.06, ease }}
                 onClick={() => {
-                  if (title === 'Masterclass Series') navigate('/masterclass');
-                  else if (title === 'Music Catalog' || title === 'Audio Collection') navigate('/audio');
-                  else if (title === 'Film Collection' || title === 'Video Library') navigate('/video');
+                  if (title === 'Masterclass Series') openModal('masterclass');
+                  else if (title === 'Music Catalog' || title === 'Audio Collection') openModal('audio');
+                  else if (title === 'Film Collection' || title === 'Video Library') openModal('video');
                 }}
                 className={`bg-usa-card border border-usa-border rounded-xl overflow-hidden text-left transition-all duration-200 hover:border-usa-blue hover:-translate-y-0.5 ${
                   i === 6 ? 'col-span-2 sm:col-span-1' : ''
@@ -293,7 +295,7 @@ export default function Home() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => navigate('/audio')}
+          onClick={() => openModal('audio')}
           className="h-11 px-6 border border-usa-border bg-transparent text-white rounded-full flex items-center gap-2 text-sm font-semibold hover:border-usa-blue hover:bg-usa-blue/10 transition-all"
         >
           <Headphones size={16} strokeWidth={1.5} />
@@ -303,7 +305,7 @@ export default function Home() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => navigate('/video')}
+          onClick={() => openModal('video')}
           className="h-11 px-6 border border-usa-border bg-transparent text-white rounded-full flex items-center gap-2 text-sm font-semibold hover:border-usa-blue hover:bg-usa-blue/10 transition-all"
         >
           <Play size={16} strokeWidth={1.5} />

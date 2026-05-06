@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, GraduationCap, Headphones, Video, MessageCircle, Search, LayoutGrid, BookOpen, Shield, Settings } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useModal } from './ModalContext';
+import type { ModalType } from './ModalContext';
 import LogoUSA from './icons/LogoUSA';
 
-const menuItems = [
-  { icon: GraduationCap, label: 'Masterclass', path: '/masterclass' },
-  { icon: Headphones, label: 'Audio', path: '/audio' },
-  { icon: Video, label: 'Video', path: '/video' },
-  { icon: MessageCircle, label: 'Ask Concierge', path: '/concierge' },
+type MenuItem =
+  | { icon: typeof GraduationCap; label: string; modal: ModalType }
+  | { icon: typeof GraduationCap; label: string; path: string };
+
+const menuItems: MenuItem[] = [
+  { icon: GraduationCap, label: 'Masterclass', modal: 'masterclass' },
+  { icon: Headphones, label: 'Audio', modal: 'audio' },
+  { icon: Video, label: 'Video', modal: 'video' },
+  { icon: MessageCircle, label: 'Ask Concierge', modal: 'concierge' },
   { icon: Search, label: 'Ask SORME', path: '/' },
   { icon: LayoutGrid, label: "SubDAO's", path: '/' },
   { icon: BookOpen, label: 'EduTech', path: '/' },
@@ -20,6 +26,17 @@ const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { openModal } = useModal();
+
+  const handleMenuClick = (item: MenuItem) => {
+    setMenuOpen(false);
+    if ('modal' in item) {
+      openModal(item.modal);
+    } else {
+      navigate(item.path);
+    }
+  };
 
   return (
     <>
@@ -77,15 +94,14 @@ export default function Navbar() {
                 {menuItems.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <NavLink
+                    <button
                       key={item.label}
-                      to={item.path}
-                      onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-3 h-12 px-4 rounded-lg hover:bg-usa-elevated transition-colors"
+                      onClick={() => handleMenuClick(item)}
+                      className="flex items-center gap-3 h-12 px-4 rounded-lg hover:bg-usa-elevated transition-colors text-left"
                     >
                       <Icon size={20} className="text-usa-silver" strokeWidth={1.5} />
                       <span className="text-white text-sm">{item.label}</span>
-                    </NavLink>
+                    </button>
                   );
                 })}
               </nav>

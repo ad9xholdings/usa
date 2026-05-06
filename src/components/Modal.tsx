@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
   title?: string;
+  maxWidth?: string;
 }
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
-export default function Modal({ isOpen, onClose, children, title }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, maxWidth = '640px' }: ModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -47,36 +47,16 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3, ease }}
-            className="w-full max-w-[640px] max-h-[85vh] bg-usa-card border border-usa-border rounded-2xl overflow-y-auto"
+            style={{ maxWidth }}
+            className="w-full max-h-[85vh] bg-usa-card border border-usa-border rounded-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {title && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-usa-border">
-                <h2 className="text-white text-xl font-bold">{title}</h2>
-                <button
-                  onClick={onClose}
-                  className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-usa-elevated transition-colors"
-                  aria-label="Close modal"
-                >
-                  <X size={20} className="text-white" strokeWidth={2} />
-                </button>
-              </div>
-            )}
-            {!title && (
-              <div className="flex justify-end p-2">
-                <button
-                  onClick={onClose}
-                  className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-usa-elevated transition-colors"
-                  aria-label="Close modal"
-                >
-                  <X size={20} className="text-white" strokeWidth={2} />
-                </button>
-              </div>
-            )}
-            <div className="px-6 pb-6">{children}</div>
+            {children}
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   );
 }
+
+export { Modal };
