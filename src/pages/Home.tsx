@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Mic, BookOpen, MessageCircle, Menu } from 'lucide-react';
 
@@ -41,12 +41,6 @@ export default function Home() {
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const chips = useMemo(() => [
-    { label: 'Governance', path: '/governance' },
-    { label: 'Treasury', path: '/treasury' },
-    { label: 'Media', path: '/media' },
-    { label: 'Academy', path: '/academy' },
-  ], []);
 
   return (
     <div className="min-h-[100dvh] bg-black text-white overflow-x-hidden relative">
@@ -239,32 +233,20 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Quick nav chips */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-3 sm:mt-4 overflow-x-auto no-scrollbar">
-            {chips.map((chip) => (
-              <button
-                key={chip.label}
-                onClick={() => navigate(chip.path)}
-                className="shrink-0 px-3 sm:px-4 h-[30px] sm:h-[32px] rounded-full border border-white/[0.06] text-[11px] sm:text-[12px] text-white/35 hover:border-white/20 hover:text-white/60 transition-all"
-              >
-                {chip.label}
-              </button>
-            ))}
-          </div>
         </section>
 
         {/* ── Bottom Cards ── */}
         <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10 lg:mt-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            {/* EduTech */}
+            {/* Battle */}
             <button
               onClick={() => navigate('/academy')}
               className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98] md:col-span-1"
             >
               <BookOpen size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
-              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">EduTech</span>
-              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Education</span>
-              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase">Technology</span>
+              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Battle</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Mrs. Cotton's</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase">Academy</span>
             </button>
 
             {/* Ask 9x */}
