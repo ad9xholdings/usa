@@ -103,16 +103,9 @@ export default function Home() {
             <>
               <button
                 onClick={() => openAuth('login')}
-                className="hidden sm:block text-[11px] tracking-[0.15em] text-white/40 hover:text-white/70 transition-colors uppercase"
+                className="h-[32px] px-4 rounded-full text-[11px] font-medium text-white/60 tracking-wide border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 transition-all"
               >
-                Sign In
-              </button>
-              <button
-                onClick={() => navigate('/pricing')}
-                className="h-[32px] px-4 rounded-full text-[11px] font-semibold text-black tracking-wide"
-                style={{ background: 'linear-gradient(180deg, #E8ECF0 0%, #BCC6CC 100%)' }}
-              >
-                Get Access Now
+                Log In
               </button>
             </>
           )}
@@ -227,16 +220,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* GET ACCESS NOW — prominent CTA */}
-          <div className="flex justify-center mt-6 sm:mt-8">
-            <button
-              onClick={() => navigate('/pricing')}
-              className="h-[52px] sm:h-[56px] px-10 sm:px-12 rounded-full text-[15px] sm:text-[16px] font-bold text-black tracking-wide transition-all hover:opacity-90 active:scale-[0.97]"
-              style={{ background: 'linear-gradient(180deg, #E8ECF0 0%, #BCC6CC 50%, #8A9499 100%)' }}
-            >
-              Get Access Now
-            </button>
-          </div>
+
         </section>
 
         {/* Bottom Cards */}
