@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { Search, Mic, BookOpen, MessageCircle, Menu } from 'lucide-react';
 
-// ── Static star data ──
 const STAR_DATA = [
   { left: 12, top: 8, size: 1.2, delay: 0.3, dur: 2.5 },
   { left: 28, top: 15, size: 0.8, delay: 1.1, dur: 3.2 },
@@ -38,13 +38,21 @@ const STAR_DATA = [
 
 export default function Home() {
   const navigate = useNavigate();
+  const { isAuthenticated, openAuth, logout } = useAuth();
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const gatedNav = (path: string) => {
+    if (isAuthenticated) {
+      navigate(path);
+    } else {
+      navigate('/pricing');
+    }
+  };
 
   return (
     <div className="min-h-[100dvh] bg-black text-white overflow-x-hidden relative">
-      {/* ── Starfield Background ── */}
+      {/* Starfield */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div
           className="absolute inset-0"
@@ -57,10 +65,7 @@ export default function Home() {
             key={i}
             className="absolute rounded-full bg-white"
             style={{
-              left: `${s.left}%`,
-              top: `${s.top}%`,
-              width: s.size,
-              height: s.size,
+              left: `${s.left}%`, top: `${s.top}%`, width: s.size, height: s.size,
               opacity: 0.25,
               animation: `twinkle ${s.dur}s ease-in-out ${s.delay}s infinite alternate`,
             }}
@@ -68,88 +73,81 @@ export default function Home() {
         ))}
       </div>
 
-      {/* ── Top Navigation Bar ── */}
-      <nav className="relative z-50 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 h-14 md:h-16">
-        {/* Logo - hidden on smallest screens, visible on xs+ */}
+      {/* Nav */}
+      <nav className="relative z-50 flex items-center justify-between px-4 sm:px-6 md:px-8 h-14 md:h-16">
         <div className="hidden xs:flex items-center gap-2">
           <svg width="28" height="32" viewBox="0 0 52 60" fill="none" className="opacity-70">
             <path d="M26 0L51.98 15V45L26 60L0.02 45V15L26 0Z" stroke="rgba(255,255,255,0.5)" strokeWidth="1" fill="none" />
             <circle cx="26" cy="30" r="6" stroke="rgba(255,255,255,0.6)" strokeWidth="1" fill="none" />
           </svg>
-          <span className="text-[11px] tracking-[0.2em] text-white/50 uppercase font-mono hidden sm:inline">
-            USA Master
-          </span>
+          <span className="text-[11px] tracking-[0.2em] text-white/50 uppercase font-mono hidden sm:inline">USA Master</span>
         </div>
 
-        {/* Desktop Nav Links - hidden on mobile, visible on lg+ */}
+        {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8">
-          <button onClick={() => navigate('/sorme')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">SORME</button>
-          <button onClick={() => navigate('/media')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Media</button>
-          <button onClick={() => navigate('/academy')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Academy</button>
+          <button onClick={() => gatedNav('/sorme')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">SORME</button>
+          <button onClick={() => gatedNav('/media')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Media</button>
+          <button onClick={() => gatedNav('/academy')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Academy</button>
           <button onClick={() => navigate('/pricing')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Pricing</button>
         </div>
 
-        {/* Right side */}
         <div className="flex items-center gap-3 ml-auto">
-          <button
-            onClick={() => navigate('/governance')}
-            className="hidden sm:block text-[11px] tracking-[0.15em] text-white/40 hover:text-white/70 transition-colors uppercase"
-          >
-            Enter DAO
-          </button>
-          <button
-            onClick={() => navigate('/menu')}
-            className="p-2 hover:bg-white/[0.04] rounded-lg transition-colors"
-            aria-label="Menu"
-          >
+          {isAuthenticated ? (
+            <button
+              onClick={logout}
+              className="text-[11px] tracking-[0.15em] text-white/40 hover:text-white/70 transition-colors uppercase"
+            >
+              Log Out
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={() => openAuth('login')}
+                className="hidden sm:block text-[11px] tracking-[0.15em] text-white/40 hover:text-white/70 transition-colors uppercase"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => navigate('/pricing')}
+                className="h-[32px] px-4 rounded-full text-[11px] font-semibold text-black tracking-wide"
+                style={{ background: 'linear-gradient(180deg, #E8ECF0 0%, #BCC6CC 100%)' }}
+              >
+                Get Access Now
+              </button>
+            </>
+          )}
+          <button onClick={() => navigate('/menu')} className="p-2 hover:bg-white/[0.04] rounded-lg transition-colors">
             <Menu size={20} className="text-white/70" />
           </button>
         </div>
       </nav>
 
-      {/* ── Main Content ── */}
-      <main className="relative z-10 flex flex-col items-center px-5 sm:px-8 md:px-12 lg:px-16 pt-6 sm:pt-8 md:pt-12 lg:pt-16 pb-8 md:pb-12">
-        {/* Hero Section */}
+      {/* Hero */}
+      <main className="relative z-10 flex flex-col items-center px-5 sm:px-8 md:px-12 pt-6 sm:pt-8 md:pt-12">
         <section className="flex flex-col items-center w-full max-w-[680px] lg:max-w-[800px]">
-          {/* Hex Logo - larger on desktop */}
-          <div className="mb-5 md:mb-6 lg:mb-8">
-            <svg 
-              className="w-[52px] h-[60px] md:w-[64px] md:h-[74px] lg:w-[76px] lg:h-[88px] opacity-90" 
-              viewBox="0 0 52 60" 
-              fill="none"
-            >
-              <path
-                d="M26 0L51.98 15V45L26 60L0.02 45V15L26 0Z"
-                stroke="rgba(255,255,255,0.5)"
-                strokeWidth="1"
-                fill="none"
-              />
-              <path
-                d="M26 8L44 18.5V39.5L26 50L8 39.5V18.5L26 8Z"
-                stroke="rgba(255,255,255,0.35)"
-                strokeWidth="0.8"
-                fill="none"
-              />
+          {/* Logo */}
+          <div className="mb-5 md:mb-6">
+            <svg className="w-[52px] h-[60px] md:w-[64px] md:h-[74px] opacity-90" viewBox="0 0 52 60" fill="none">
+              <path d="M26 0L51.98 15V45L26 60L0.02 45V15L26 0Z" stroke="rgba(255,255,255,0.5)" strokeWidth="1" fill="none" />
+              <path d="M26 8L44 18.5V39.5L26 50L8 39.5V18.5L26 8Z" stroke="rgba(255,255,255,0.35)" strokeWidth="0.8" fill="none" />
               <circle cx="26" cy="30" r="6" stroke="rgba(255,255,255,0.6)" strokeWidth="1" fill="none" />
               <circle cx="26" cy="30" r="2.5" fill="rgba(255,255,255,0.5)" />
             </svg>
           </div>
 
-          {/* Entity Line */}
+          {/* Entity */}
           <p className="text-[10px] md:text-[11px] font-medium tracking-[0.35em] text-white/50 uppercase mb-2 text-center font-mono">
             United Series of America Master DAO, LLC
           </p>
-
-          {/* Subtitle */}
-          <p className="text-[10px] md:text-[11px] tracking-[0.15em] text-white/35 text-center leading-relaxed">
+          <p className="text-[10px] tracking-[0.15em] text-white/35 text-center leading-relaxed">
             Republic of Marshall Islands &middot; Forming July 4, 2026 &middot;<br className="hidden xs:block" />
-            <span className="xs:hidden"> </span>Algorithmically Governed
+            Algorithmically Governed
           </p>
 
           {/* Title */}
-          <div className="mt-8 md:mt-10 lg:mt-12 text-center">
+          <div className="mt-8 md:mt-10 text-center">
             <h1
-              className="text-[3.2rem] sm:text-[4rem] md:text-[5rem] lg:text-[6rem] font-black leading-[0.95]"
+              className="text-[3.2rem] sm:text-[4rem] md:text-[5rem] font-black leading-[0.95]"
               style={{
                 background: 'linear-gradient(180deg, #FFFFFF 0%, #C8D0D8 50%, #8A9499 100%)',
                 WebkitBackgroundClip: 'text',
@@ -160,32 +158,28 @@ export default function Home() {
             >
               USA Master
             </h1>
-
-            <p className="mt-2 md:mt-3 text-[1.15rem] sm:text-[1.35rem] md:text-[1.6rem] lg:text-[1.8rem] font-semibold text-white/70 tracking-tight">
+            <p className="mt-2 text-[1.15rem] sm:text-[1.35rem] md:text-[1.6rem] font-semibold text-white/70 tracking-tight">
               The Everything App
             </p>
-
-            {/* Diamond dots */}
             <div className="flex items-center justify-center gap-3 my-4 md:my-5">
               <span className="text-[8px] md:text-[10px] text-white/30">&#9670;</span>
               <span className="text-[8px] md:text-[10px] text-white/20">&#9670;</span>
             </div>
-
-            {/* Tagline */}
-            <p className="text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] text-white/45 leading-relaxed max-w-[340px] sm:max-w-[420px] md:max-w-[500px] mx-auto">
+            <p className="text-[13px] sm:text-[14px] md:text-[15px] text-white/45 leading-relaxed max-w-[340px] sm:max-w-[420px] mx-auto">
               Music, Movies, Masterclasses & Monetization
             </p>
           </div>
         </section>
 
-        {/* ── SORME Search ── */}
-        <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10 lg:mt-12">
+        {/* Search */}
+        <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10">
           <div
             className={`
               flex items-center gap-3 px-5 h-[52px] sm:h-[56px] md:h-[60px] rounded-full border
-              transition-all duration-300
+              transition-all duration-300 cursor-pointer
               ${searchFocused ? 'border-white/30 bg-white/[0.04]' : 'border-white/10 bg-white/[0.02]'}
             `}
+            onClick={() => gatedNav('/sorme')}
           >
             <Search size={18} className="text-white/30 shrink-0" />
             <input
@@ -193,12 +187,12 @@ export default function Home() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search everything with SORME"
-              className="flex-1 bg-transparent text-[14px] sm:text-[15px] text-white/60 placeholder:text-white/25 outline-none"
+              className="flex-1 bg-transparent text-[14px] sm:text-[15px] text-white/60 placeholder:text-white/25 outline-none cursor-pointer"
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
-              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/sorme'); }}
+              readOnly
             />
-            <button className="p-1.5 hover:bg-white/[0.04] rounded-full transition-colors">
+            <button className="p-1.5">
               <Mic size={18} className="text-white/30" />
             </button>
           </div>
@@ -208,7 +202,7 @@ export default function Home() {
             {['Search', 'Offer', 'Request', 'Match'].map((label) => (
               <button
                 key={label}
-                onClick={() => navigate('/sorme')}
+                onClick={() => gatedNav('/sorme')}
                 className="shrink-0 px-4 sm:px-5 md:px-6 h-[36px] sm:h-[40px] rounded-full border border-white/10 text-[12px] sm:text-[13px] text-white/50 hover:border-white/25 hover:text-white/70 hover:bg-white/[0.03] transition-all"
               >
                 {label}
@@ -225,7 +219,7 @@ export default function Home() {
             ].map((item) => (
               <button
                 key={item.label}
-                onClick={() => navigate(item.path)}
+                onClick={() => gatedNav(item.path)}
                 className="shrink-0 px-4 sm:px-5 md:px-6 h-[36px] sm:h-[40px] rounded-full border border-white/10 text-[12px] sm:text-[13px] text-white/50 hover:border-white/25 hover:text-white/70 hover:bg-white/[0.03] transition-all"
               >
                 {item.label}
@@ -233,35 +227,41 @@ export default function Home() {
             ))}
           </div>
 
+          {/* GET ACCESS NOW — prominent CTA */}
+          <div className="flex justify-center mt-6 sm:mt-8">
+            <button
+              onClick={() => navigate('/pricing')}
+              className="h-[52px] sm:h-[56px] px-10 sm:px-12 rounded-full text-[15px] sm:text-[16px] font-bold text-black tracking-wide transition-all hover:opacity-90 active:scale-[0.97]"
+              style={{ background: 'linear-gradient(180deg, #E8ECF0 0%, #BCC6CC 50%, #8A9499 100%)' }}
+            >
+              Get Access Now
+            </button>
+          </div>
         </section>
 
-        {/* ── Bottom Cards ── */}
-        <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10 lg:mt-12">
+        {/* Bottom Cards */}
+        <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10 pb-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            {/* Battle */}
             <button
-              onClick={() => navigate('/academy')}
-              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98] md:col-span-1"
+              onClick={() => gatedNav('/academy')}
+              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
             >
               <BookOpen size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
               <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Battle</span>
-              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Mrs. Cotton's</span>
-              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase">Academy</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Challenge</span>
             </button>
 
-            {/* Ask 9x */}
             <button
-              onClick={() => navigate('/ask9x')}
-              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98] md:col-span-1"
+              onClick={() => gatedNav('/ask9x')}
+              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
             >
               <MessageCircle size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
               <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Ask 9x</span>
               <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">AI Concierge</span>
             </button>
 
-            {/* SORME - hidden on mobile, visible on md+ */}
             <button
-              onClick={() => navigate('/sorme')}
+              onClick={() => gatedNav('/sorme')}
               className="hidden md:flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
             >
               <Search size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
@@ -269,21 +269,20 @@ export default function Home() {
               <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Search Engine</span>
             </button>
 
-            {/* Pricing - hidden on mobile, visible on md+ */}
             <button
               onClick={() => navigate('/pricing')}
               className="hidden md:flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
             >
-              <span className="text-[28px] text-white/40 mb-6 sm:mb-8" style={{ fontFamily: 'serif' }}>$</span>
+              <span className="text-[28px] text-white/40 mb-6 sm:mb-8 font-serif">$</span>
               <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Pricing</span>
-              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Plans & Tiers</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Free &middot; Premium &middot; Custom</span>
             </button>
           </div>
         </section>
       </main>
 
-      {/* ── Footer ── */}
-      <footer className="relative z-10 w-full border-t border-white/[0.04] py-6 md:py-8 mt-8 md:mt-12">
+      {/* Footer */}
+      <footer className="relative z-10 w-full border-t border-white/[0.04] py-6 md:py-8">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4">
           <p className="text-[9px] sm:text-[10px] tracking-[0.2em] text-white/20 uppercase font-mono text-center">
             United Series of America Master DAO, LLC
@@ -295,7 +294,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* ── Twinkle Animation ── */}
       <style>{`
         @keyframes twinkle {
           0% { opacity: 0.12; }
