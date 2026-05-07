@@ -223,43 +223,25 @@ export default function Home() {
 
         </section>
 
-        {/* Bottom Cards */}
-        <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10 pb-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        {/* Bottom Cards — Battle + Ask 9x centered */}
+        <section className="w-full max-w-[640px] mt-8 md:mt-10 pb-10">
+          <div className="flex items-stretch justify-center gap-3 sm:gap-4">
             <button
               onClick={() => gatedNav('/academy')}
-              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
+              className="flex flex-col items-center p-5 sm:p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-center active:scale-[0.98] w-[160px] sm:w-[180px]"
             >
-              <BookOpen size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
+              <BookOpen size={28} className="text-white/40 mb-5 sm:mb-6" strokeWidth={1.2} />
               <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Battle</span>
               <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Challenge</span>
             </button>
 
             <button
               onClick={() => gatedNav('/ask9x')}
-              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
+              className="flex flex-col items-center p-5 sm:p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-center active:scale-[0.98] w-[160px] sm:w-[180px]"
             >
-              <MessageCircle size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
+              <MessageCircle size={28} className="text-white/40 mb-5 sm:mb-6" strokeWidth={1.2} />
               <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Ask 9x</span>
               <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">AI Concierge</span>
-            </button>
-
-            <button
-              onClick={() => gatedNav('/sorme')}
-              className="hidden md:flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
-            >
-              <Search size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
-              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">SORME</span>
-              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Search Engine</span>
-            </button>
-
-            <button
-              onClick={() => navigate('/pricing')}
-              className="hidden md:flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
-            >
-              <span className="text-[28px] text-white/40 mb-6 sm:mb-8 font-serif">$</span>
-              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Pricing</span>
-              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Free &middot; Premium &middot; Custom</span>
             </button>
           </div>
         </section>

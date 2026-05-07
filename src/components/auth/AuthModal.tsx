@@ -1,13 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { X, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import { X, Mail, Lock, User, ArrowRight, CheckCircle, Wallet } from 'lucide-react';
 
 export default function AuthModal() {
   const { showAuth, closeAuth, authMode, login } = useAuth();
+  const { hasPaid } = useCart();
   const [mode, setMode] = useState<'register' | 'login'>(authMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [autoLoggingIn, setAutoLoggingIn] = useState(false);
+  const navigate = useNavigate();
+
+  // Auto-login after payment
+  useEffect(() => {
+    if (showAuth && hasPaid && !autoLoggingIn) {
+      setAutoLoggingIn(true);
+      setTimeout(() => {
+        login();
+        setAutoLoggingIn(false);
+      }, 2000);
+    }
+  }, [showAuth, hasPaid, autoLoggingIn, login]);
+
+  // Sync mode when authMode changes
+  useEffect(() => {
+    setMode(authMode);
+  }, [authMode]);
 
   if (!showAuth) return null;
 
@@ -16,6 +37,23 @@ export default function AuthModal() {
     login();
   };
 
+  // Auto-login state (after payment)
+  if (hasPaid && autoLoggingIn) {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => { closeAuth(); navigate('/pricing'); }} />
+        <div className="relative w-full max-w-[420px] bg-[#0A0A0A] border border-white/[0.08] rounded-2xl p-10 text-center">
+          <div className="w-16 h-16 mx-auto rounded-full border border-green-400/20 bg-green-400/5 flex items-center justify-center mb-5">
+            <CheckCircle size={32} className="text-green-400/60" />
+          </div>
+          <h3 className="text-[18px] font-bold text-white/90 mb-2">Payment Confirmed</h3>
+          <p className="text-[13px] text-white/40 mb-6">Logging you in automatically...</p>
+          <div className="w-10 h-10 mx-auto rounded-full border-2 border-white/10 border-t-white/40 animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -23,7 +61,6 @@ export default function AuthModal() {
 
       {/* Modal */}
       <div className="relative w-full max-w-[420px] bg-[#0A0A0A] border border-white/[0.08] rounded-2xl overflow-hidden">
-        {/* Close */}
         <button
           onClick={closeAuth}
           className="absolute top-4 right-4 p-2 hover:bg-white/[0.04] rounded-lg transition-colors z-10"
@@ -45,6 +82,23 @@ export default function AuthModal() {
               ? 'Join the United Series of America ecosystem'
               : 'Sign in to your USA Master account'}
           </p>
+        </div>
+
+        {/* Wallet Payment Option */}
+        <div className="px-6 pb-4">
+          <button
+            onClick={closeAuth}
+            className="w-full h-[48px] rounded-xl flex items-center justify-center gap-2 text-[13px] text-white/60 border border-white/10 hover:bg-white/[0.03] transition-colors"
+          >
+            <Wallet size={16} className="text-white/40" />
+            Pay with Arculus via WisdomPay
+            <ArrowRight size={14} className="text-white/30" />
+          </button>
+          <div className="flex items-center gap-3 my-4">
+            <div className="flex-1 h-px bg-white/[0.06]" />
+            <span className="text-[10px] text-white/25 uppercase">or</span>
+            <div className="flex-1 h-px bg-white/[0.06]" />
+          </div>
         </div>
 
         {/* Form */}
