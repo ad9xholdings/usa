@@ -209,13 +209,43 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Chips */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-5 overflow-x-auto no-scrollbar">
+          {/* Search / Offer / Request / Match */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-5">
+            {['Search', 'Offer', 'Request', 'Match'].map((label) => (
+              <button
+                key={label}
+                onClick={() => navigate('/sorme')}
+                className="shrink-0 px-4 sm:px-5 md:px-6 h-[36px] sm:h-[40px] rounded-full border border-white/10 text-[12px] sm:text-[13px] text-white/50 hover:border-white/25 hover:text-white/70 hover:bg-white/[0.03] transition-all"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Governance / Access / Utility */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-3 sm:mt-4">
+            {[
+              { label: 'Governance', path: '/governance' },
+              { label: 'Access', path: '/blackdiamond' },
+              { label: 'Utility', path: '/wisdompay' },
+            ].map((item) => (
+              <button
+                key={item.label}
+                onClick={() => navigate(item.path)}
+                className="shrink-0 px-4 sm:px-5 md:px-6 h-[36px] sm:h-[40px] rounded-full border border-white/10 text-[12px] sm:text-[13px] text-white/50 hover:border-white/25 hover:text-white/70 hover:bg-white/[0.03] transition-all"
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Quick nav chips */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-3 sm:mt-4 overflow-x-auto no-scrollbar">
             {chips.map((chip) => (
               <button
                 key={chip.label}
                 onClick={() => navigate(chip.path)}
-                className="shrink-0 px-4 sm:px-5 h-[36px] sm:h-[40px] rounded-full border border-white/10 text-[12px] sm:text-[13px] text-white/50 hover:border-white/25 hover:text-white/70 transition-all"
+                className="shrink-0 px-3 sm:px-4 h-[30px] sm:h-[32px] rounded-full border border-white/[0.06] text-[11px] sm:text-[12px] text-white/35 hover:border-white/20 hover:text-white/60 transition-all"
               >
                 {chip.label}
               </button>
