@@ -127,7 +127,7 @@ export default function Home() {
 
           {/* Tagline */}
           <p className="text-[13px] text-white/45 leading-relaxed max-w-[340px] mx-auto">
-            Music, Movies and MasterClasses while you match in the Creators Ecosystem
+            Music, Movies, Masterclasses & Monetization
           </p>
         </div>
       </section>
