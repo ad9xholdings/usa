@@ -1,202 +1,293 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Mic, BookOpen, MessageCircle } from 'lucide-react';
+import { Search, Mic, BookOpen, MessageCircle, Menu } from 'lucide-react';
+
+// ── Static star data ──
+const STAR_DATA = [
+  { left: 12, top: 8, size: 1.2, delay: 0.3, dur: 2.5 },
+  { left: 28, top: 15, size: 0.8, delay: 1.1, dur: 3.2 },
+  { left: 45, top: 5, size: 1.5, delay: 0.7, dur: 2.8 },
+  { left: 62, top: 22, size: 0.6, delay: 1.8, dur: 3.5 },
+  { left: 78, top: 10, size: 1.0, delay: 0.5, dur: 2.2 },
+  { left: 88, top: 30, size: 1.3, delay: 2.1, dur: 3.0 },
+  { left: 5, top: 35, size: 0.7, delay: 1.4, dur: 2.7 },
+  { left: 35, top: 40, size: 1.1, delay: 0.9, dur: 3.3 },
+  { left: 55, top: 45, size: 0.9, delay: 1.6, dur: 2.4 },
+  { left: 72, top: 50, size: 1.4, delay: 0.2, dur: 3.1 },
+  { left: 15, top: 55, size: 0.5, delay: 2.3, dur: 2.9 },
+  { left: 42, top: 60, size: 1.0, delay: 0.8, dur: 2.6 },
+  { left: 68, top: 65, size: 0.8, delay: 1.2, dur: 3.4 },
+  { left: 82, top: 70, size: 1.2, delay: 1.9, dur: 2.3 },
+  { left: 22, top: 72, size: 0.6, delay: 0.4, dur: 3.0 },
+  { left: 48, top: 78, size: 1.3, delay: 1.5, dur: 2.8 },
+  { left: 8, top: 85, size: 0.9, delay: 2.0, dur: 3.2 },
+  { left: 58, top: 88, size: 0.7, delay: 0.6, dur: 2.5 },
+  { left: 75, top: 82, size: 1.1, delay: 1.0, dur: 2.7 },
+  { left: 92, top: 92, size: 0.8, delay: 1.7, dur: 3.3 },
+  { left: 18, top: 95, size: 1.0, delay: 0.1, dur: 2.4 },
+  { left: 38, top: 92, size: 0.5, delay: 2.2, dur: 3.1 },
+  { left: 65, top: 12, size: 0.7, delay: 1.3, dur: 2.6 },
+  { left: 85, top: 48, size: 1.2, delay: 0.8, dur: 3.0 },
+  { left: 3, top: 62, size: 0.9, delay: 1.6, dur: 2.9 },
+  { left: 25, top: 25, size: 0.6, delay: 0.4, dur: 3.4 },
+  { left: 50, top: 32, size: 1.4, delay: 2.1, dur: 2.3 },
+  { left: 95, top: 18, size: 0.8, delay: 0.9, dur: 2.8 },
+  { left: 33, top: 75, size: 1.1, delay: 1.4, dur: 3.2 },
+  { left: 60, top: 55, size: 0.5, delay: 0.2, dur: 2.6 },
+];
 
 export default function Home() {
   const navigate = useNavigate();
   const [searchFocused, setSearchFocused] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    const onScroll = () => {};
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  const chips = [
+  const chips = useMemo(() => [
     { label: 'Governance', path: '/governance' },
     { label: 'Treasury', path: '/treasury' },
     { label: 'Media', path: '/media' },
     { label: 'Academy', path: '/academy' },
-  ];
-
-  const stars = Array.from({ length: 40 }, (_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    size: Math.random() * 2 + 0.5,
-    delay: Math.random() * 5,
-    duration: Math.random() * 3 + 2,
-  }));
+  ], []);
 
   return (
-    <div className="min-h-[100dvh] bg-black text-white overflow-x-hidden">
-      {/* Starfield */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+    <div className="min-h-[100dvh] bg-black text-white overflow-x-hidden relative">
+      {/* ── Starfield Background ── */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div
           className="absolute inset-0"
           style={{
             background: 'radial-gradient(ellipse at 50% 55%, rgba(255,255,255,0.06) 0%, transparent 50%)',
           }}
         />
-        {stars.map((s) => (
+        {STAR_DATA.map((s, i) => (
           <div
-            key={s.id}
+            key={i}
             className="absolute rounded-full bg-white"
             style={{
-              left: s.left,
-              top: s.top,
+              left: `${s.left}%`,
+              top: `${s.top}%`,
               width: s.size,
               height: s.size,
-              opacity: 0.3,
-              animation: `twinkle ${s.duration}s ease-in-out ${s.delay}s infinite alternate`,
+              opacity: 0.25,
+              animation: `twinkle ${s.dur}s ease-in-out ${s.delay}s infinite alternate`,
             }}
           />
         ))}
       </div>
 
-      {/* Hamburger */}
-      <button
-        onClick={() => navigate('/menu')}
-        className="fixed top-4 right-4 z-50 flex flex-col gap-[5px] p-2"
-        aria-label="Menu"
-      >
-        <span className="block w-5 h-[1.5px] bg-white/80" />
-        <span className="block w-5 h-[1.5px] bg-white/80" />
-      </button>
-
-      {/* Hero */}
-      <section className="relative flex flex-col items-center px-5 pt-16 pb-6">
-        {/* Hex Logo */}
-        <div className="mb-5">
-          <svg width="52" height="60" viewBox="0 0 52 60" fill="none" className="opacity-90">
-            <path
-              d="M26 0L51.98 15V45L26 60L0.02 45V15L26 0Z"
-              stroke="rgba(255,255,255,0.5)"
-              strokeWidth="1"
-              fill="none"
-            />
-            <path
-              d="M26 8L44 18.5V39.5L26 50L8 39.5V18.5L26 8Z"
-              stroke="rgba(255,255,255,0.35)"
-              strokeWidth="0.8"
-              fill="none"
-            />
+      {/* ── Top Navigation Bar ── */}
+      <nav className="relative z-50 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 h-14 md:h-16">
+        {/* Logo - hidden on smallest screens, visible on xs+ */}
+        <div className="hidden xs:flex items-center gap-2">
+          <svg width="28" height="32" viewBox="0 0 52 60" fill="none" className="opacity-70">
+            <path d="M26 0L51.98 15V45L26 60L0.02 45V15L26 0Z" stroke="rgba(255,255,255,0.5)" strokeWidth="1" fill="none" />
             <circle cx="26" cy="30" r="6" stroke="rgba(255,255,255,0.6)" strokeWidth="1" fill="none" />
-            <circle cx="26" cy="30" r="2.5" fill="rgba(255,255,255,0.5)" />
           </svg>
+          <span className="text-[11px] tracking-[0.2em] text-white/50 uppercase font-mono hidden sm:inline">
+            USA Master
+          </span>
         </div>
 
-        {/* Entity */}
-        <p
-          className="text-[10px] font-medium tracking-[0.35em] text-white/50 uppercase mb-2 text-center"
-          style={{ fontFamily: 'monospace' }}
-        >
-          United Series of America Master DAO, LLC
-        </p>
+        {/* Desktop Nav Links - hidden on mobile, visible on lg+ */}
+        <div className="hidden lg:flex items-center gap-8">
+          <button onClick={() => navigate('/sorme')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">SORME</button>
+          <button onClick={() => navigate('/media')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Media</button>
+          <button onClick={() => navigate('/academy')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Academy</button>
+          <button onClick={() => navigate('/pricing')} className="text-[13px] text-white/40 hover:text-white/70 transition-colors">Pricing</button>
+        </div>
 
-        {/* Subtitle */}
-        <p className="text-[10px] tracking-[0.15em] text-white/35 text-center leading-relaxed">
-          Republic of Marshall Islands &middot; Forming July 4, 2026 &middot;<br />
-          Algorithmically Governed
-        </p>
-
-        {/* Title */}
-        <div className="mt-8 text-center">
-          <h1
-            className="text-[3.2rem] font-black leading-[0.95] tracking-tight"
-            style={{
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #C8D0D8 50%, #8A9499 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              letterSpacing: '-0.03em',
-            }}
+        {/* Right side */}
+        <div className="flex items-center gap-3 ml-auto">
+          <button
+            onClick={() => navigate('/governance')}
+            className="hidden sm:block text-[11px] tracking-[0.15em] text-white/40 hover:text-white/70 transition-colors uppercase"
           >
-            USA Master
-          </h1>
+            Enter DAO
+          </button>
+          <button
+            onClick={() => navigate('/menu')}
+            className="p-2 hover:bg-white/[0.04] rounded-lg transition-colors"
+            aria-label="Menu"
+          >
+            <Menu size={20} className="text-white/70" />
+          </button>
+        </div>
+      </nav>
 
-          <p className="mt-2 text-[1.15rem] font-semibold text-white/70 tracking-tight">
-            The Everything App
-          </p>
-
-          {/* Diamond dots */}
-          <div className="flex items-center justify-center gap-3 my-4">
-            <span className="text-[8px] text-white/30">&#9670;</span>
-            <span className="text-[8px] text-white/20">&#9670;</span>
+      {/* ── Main Content ── */}
+      <main className="relative z-10 flex flex-col items-center px-5 sm:px-8 md:px-12 lg:px-16 pt-6 sm:pt-8 md:pt-12 lg:pt-16 pb-8 md:pb-12">
+        {/* Hero Section */}
+        <section className="flex flex-col items-center w-full max-w-[680px] lg:max-w-[800px]">
+          {/* Hex Logo - larger on desktop */}
+          <div className="mb-5 md:mb-6 lg:mb-8">
+            <svg 
+              className="w-[52px] h-[60px] md:w-[64px] md:h-[74px] lg:w-[76px] lg:h-[88px] opacity-90" 
+              viewBox="0 0 52 60" 
+              fill="none"
+            >
+              <path
+                d="M26 0L51.98 15V45L26 60L0.02 45V15L26 0Z"
+                stroke="rgba(255,255,255,0.5)"
+                strokeWidth="1"
+                fill="none"
+              />
+              <path
+                d="M26 8L44 18.5V39.5L26 50L8 39.5V18.5L26 8Z"
+                stroke="rgba(255,255,255,0.35)"
+                strokeWidth="0.8"
+                fill="none"
+              />
+              <circle cx="26" cy="30" r="6" stroke="rgba(255,255,255,0.6)" strokeWidth="1" fill="none" />
+              <circle cx="26" cy="30" r="2.5" fill="rgba(255,255,255,0.5)" />
+            </svg>
           </div>
 
-          {/* Tagline */}
-          <p className="text-[13px] text-white/45 leading-relaxed max-w-[340px] mx-auto">
-            Music, Movies, Masterclasses & Monetization
+          {/* Entity Line */}
+          <p className="text-[10px] md:text-[11px] font-medium tracking-[0.35em] text-white/50 uppercase mb-2 text-center font-mono">
+            United Series of America Master DAO, LLC
+          </p>
+
+          {/* Subtitle */}
+          <p className="text-[10px] md:text-[11px] tracking-[0.15em] text-white/35 text-center leading-relaxed">
+            Republic of Marshall Islands &middot; Forming July 4, 2026 &middot;<br className="hidden xs:block" />
+            <span className="xs:hidden"> </span>Algorithmically Governed
+          </p>
+
+          {/* Title */}
+          <div className="mt-8 md:mt-10 lg:mt-12 text-center">
+            <h1
+              className="text-[3.2rem] sm:text-[4rem] md:text-[5rem] lg:text-[6rem] font-black leading-[0.95]"
+              style={{
+                background: 'linear-gradient(180deg, #FFFFFF 0%, #C8D0D8 50%, #8A9499 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                letterSpacing: '-0.03em',
+              }}
+            >
+              USA Master
+            </h1>
+
+            <p className="mt-2 md:mt-3 text-[1.15rem] sm:text-[1.35rem] md:text-[1.6rem] lg:text-[1.8rem] font-semibold text-white/70 tracking-tight">
+              The Everything App
+            </p>
+
+            {/* Diamond dots */}
+            <div className="flex items-center justify-center gap-3 my-4 md:my-5">
+              <span className="text-[8px] md:text-[10px] text-white/30">&#9670;</span>
+              <span className="text-[8px] md:text-[10px] text-white/20">&#9670;</span>
+            </div>
+
+            {/* Tagline */}
+            <p className="text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] text-white/45 leading-relaxed max-w-[340px] sm:max-w-[420px] md:max-w-[500px] mx-auto">
+              Music, Movies, Masterclasses & Monetization
+            </p>
+          </div>
+        </section>
+
+        {/* ── SORME Search ── */}
+        <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10 lg:mt-12">
+          <div
+            className={`
+              flex items-center gap-3 px-5 h-[52px] sm:h-[56px] md:h-[60px] rounded-full border
+              transition-all duration-300
+              ${searchFocused ? 'border-white/30 bg-white/[0.04]' : 'border-white/10 bg-white/[0.02]'}
+            `}
+          >
+            <Search size={18} className="text-white/30 shrink-0" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search everything with SORME"
+              className="flex-1 bg-transparent text-[14px] sm:text-[15px] text-white/60 placeholder:text-white/25 outline-none"
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/sorme'); }}
+            />
+            <button className="p-1.5 hover:bg-white/[0.04] rounded-full transition-colors">
+              <Mic size={18} className="text-white/30" />
+            </button>
+          </div>
+
+          {/* Chips */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-5 overflow-x-auto no-scrollbar">
+            {chips.map((chip) => (
+              <button
+                key={chip.label}
+                onClick={() => navigate(chip.path)}
+                className="shrink-0 px-4 sm:px-5 h-[36px] sm:h-[40px] rounded-full border border-white/10 text-[12px] sm:text-[13px] text-white/50 hover:border-white/25 hover:text-white/70 transition-all"
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Bottom Cards ── */}
+        <section className="w-full max-w-[640px] lg:max-w-[720px] mt-8 md:mt-10 lg:mt-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            {/* EduTech */}
+            <button
+              onClick={() => navigate('/academy')}
+              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98] md:col-span-1"
+            >
+              <BookOpen size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
+              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">EduTech</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Education</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase">Technology</span>
+            </button>
+
+            {/* Ask 9x */}
+            <button
+              onClick={() => navigate('/ask9x')}
+              className="flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98] md:col-span-1"
+            >
+              <MessageCircle size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
+              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Ask 9x</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">AI Concierge</span>
+            </button>
+
+            {/* SORME - hidden on mobile, visible on md+ */}
+            <button
+              onClick={() => navigate('/sorme')}
+              className="hidden md:flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
+            >
+              <Search size={28} className="text-white/40 mb-6 sm:mb-8" strokeWidth={1.2} />
+              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">SORME</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Search Engine</span>
+            </button>
+
+            {/* Pricing - hidden on mobile, visible on md+ */}
+            <button
+              onClick={() => navigate('/pricing')}
+              className="hidden md:flex flex-col items-start p-4 sm:p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left active:scale-[0.98]"
+            >
+              <span className="text-[28px] text-white/40 mb-6 sm:mb-8" style={{ fontFamily: 'serif' }}>$</span>
+              <span className="text-[16px] sm:text-[18px] font-bold text-white/90">Pricing</span>
+              <span className="text-[10px] sm:text-[11px] tracking-[0.15em] text-white/30 uppercase mt-1">Plans & Tiers</span>
+            </button>
+          </div>
+        </section>
+      </main>
+
+      {/* ── Footer ── */}
+      <footer className="relative z-10 w-full border-t border-white/[0.04] py-6 md:py-8 mt-8 md:mt-12">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4">
+          <p className="text-[9px] sm:text-[10px] tracking-[0.2em] text-white/20 uppercase font-mono text-center">
+            United Series of America Master DAO, LLC
+          </p>
+          <span className="hidden sm:inline text-white/10">&middot;</span>
+          <p className="text-[9px] sm:text-[10px] tracking-[0.15em] text-white/20 uppercase text-center">
+            Republic of Marshall Islands &middot; Forming July 4, 2026
           </p>
         </div>
-      </section>
+      </footer>
 
-      {/* Search */}
-      <section className="relative px-5 mt-6">
-        <div
-          className={`
-            flex items-center gap-3 px-4 h-[52px] rounded-full border
-            transition-all duration-300
-            ${searchFocused ? 'border-white/30 bg-white/[0.04]' : 'border-white/10 bg-white/[0.02]'}
-          `}
-        >
-          <Search size={18} className="text-white/30 shrink-0" />
-          <input
-            type="text"
-            placeholder="Search everything with SORME\u2122"
-            className="flex-1 bg-transparent text-[14px] text-white/60 placeholder:text-white/25 outline-none"
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
-            onKeyDown={(e) => { if (e.key === 'Enter') navigate('/sorme'); }}
-          />
-          <button className="p-1">
-            <Mic size={18} className="text-white/30" />
-          </button>
-        </div>
-
-        {/* Chips */}
-        <div className="flex items-center gap-2 mt-4 overflow-x-auto no-scrollbar">
-          {chips.map((chip) => (
-            <button
-              key={chip.label}
-              onClick={() => navigate(chip.path)}
-              className="shrink-0 px-4 h-[36px] rounded-full border border-white/10 text-[12px] text-white/50 hover:border-white/25 hover:text-white/70 transition-all"
-            >
-              {chip.label}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* Bottom Cards */}
-      <section className="relative px-5 mt-6 pb-10">
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => navigate('/academy')}
-            className="flex flex-col items-start p-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left"
-          >
-            <BookOpen size={28} className="text-white/40 mb-6" strokeWidth={1.2} />
-            <span className="text-[16px] font-bold text-white/90">EduTech</span>
-            <span className="text-[10px] tracking-[0.15em] text-white/30 uppercase mt-1">Education</span>
-            <span className="text-[10px] tracking-[0.15em] text-white/30 uppercase">Technology</span>
-          </button>
-
-          <button
-            onClick={() => navigate('/ask9x')}
-            className="flex flex-col items-start p-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all text-left"
-          >
-            <MessageCircle size={28} className="text-white/40 mb-6" strokeWidth={1.2} />
-            <span className="text-[16px] font-bold text-white/90">Ask 9x</span>
-            <span className="text-[10px] tracking-[0.15em] text-white/30 uppercase mt-1">AI Concierge</span>
-          </button>
-        </div>
-      </section>
-
+      {/* ── Twinkle Animation ── */}
       <style>{`
         @keyframes twinkle {
-          0% { opacity: 0.15; }
-          100% { opacity: 0.5; }
+          0% { opacity: 0.12; }
+          100% { opacity: 0.42; }
         }
       `}</style>
     </div>
